@@ -1,0 +1,26 @@
+# 1. DVC 라이브러리 설치
+pip install dvc dvc-gdrive
+
+# 2. Git 및 DVC 초기화
+git init
+dvc init
+
+# 3. dvc 설정 커밋
+git commit -m "Initialize DVC"
+
+# 4. 구글 드라이브 폴더를 DVC 원격 백업 저장소로 등록
+dvc remote add -d myremote gdrive://{여기에_구글_드라이브_폴더_고유_아이디_입력}
+
+# 5. DVC 설정값 변경 사항 Git에 기록
+git add .dvc/config
+git commit -m "Configure DVC Google Drive remote storage"
+
+# 6. DVC에 데이터 추가 (이 과정에서 대용량 데이터를 추적하는 dataset_dvc.dvc 가 자동 생성됨)
+dvc add dataset_dvc
+
+# 7. 실제 이미지들이 들어있는 무거운 'dataset_dvc' 폴더는 Git이 추적하지 않도록 .gitignore에 자동 추가됨
+git add dataset_dvc.dvc .gitignore
+git commit -m "Add dataset_dvc tracked by DVC"
+
+# 8. 대용량 이미지 데이터를 처음에 등록한 구글 드라이브 원격 저장소로 push (클라우드로 백업 전송)
+dvc push
